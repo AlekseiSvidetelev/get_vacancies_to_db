@@ -171,3 +171,5 @@ poetry.lock
 
 # PyPI configuration file
 .pypirc
+
+database.ini
