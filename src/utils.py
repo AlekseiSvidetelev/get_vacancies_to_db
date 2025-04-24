@@ -1,7 +1,7 @@
 import re
 from typing import Any
 
-from src.hh_api import get_employer_vacancies_hh, get_employers_hh
+from src.hh_api import get_employers_hh
 
 
 def get_list_employers(employer_name_list: list[str]) -> list[dict[str, Any]]:
@@ -68,24 +68,41 @@ def format_count_vacancies_user_output(data: list[tuple[str, str]]) -> None:
 
 def format_vacancies_info_user_output(data: list[tuple[str, str, str, str, str]]) -> None:
     """Форматирование ответа о вакансии для пользователя и вывод в терминал"""
-    for i in data:
-        company_name = i[0]
-        title = i[1]
-        salary_from = i[2] or "не указана"
-        salary_to = i[3] or "не указана"
-        url = i[4]
-        print(
-            f"Компания: {company_name}\n"
-            f"Вакансия: {title}\n"
-            f"Зарплата: {salary_from} - {salary_to}\n"
-            f"Ссылка: {url}\n"
-            f"-----"
-        )
+    try:
+        if not isinstance(data, list):
+            raise ValueError("Запрос не является списком для форматирования")
+        for i in data:
+            company_name = i[0]
+            title = i[1]
+            salary_from = i[2] or "не указана"
+            salary_to = i[3] or "не указана"
+            url = i[4]
+            print(
+                f"Компания: {company_name}\n"
+                f"Вакансия: {title}\n"
+                f"Зарплата: {salary_from} - {salary_to}\n"
+                f"Ссылка: {url}\n"
+                f"-----"
+            )
+    except Exception as e:
+        print(f"Ошибка вывода: {e}")
+
+
+def update_input_str(unit_answer: str)-> str:
+    """Очистка пользовательского ответа от лишних символов и пробелов"""
+    try:
+        if not isinstance(unit_answer, str):
+            raise ValueError("Запрос не является строкой")
+        update_str = (re.sub(r"\s+", " ", unit_answer)).strip().lower()
+        return update_str
+    except Exception as e:
+        print(f"Ошибка преобразования ответа пользователя: {e}")
+        return ""
 
 
 if __name__ == "__main__":
-    # res = get_employer_vacancies_hh("1740")
     # for employer in res:
     #     print(parse_vacancies(employer))
-
+    print(update_input_str(" да"))
+    print(update_input_str(" Да "))
     print(clean_split_str(" Да"))
