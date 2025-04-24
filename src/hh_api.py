@@ -3,11 +3,10 @@ from typing import Any
 import requests
 
 
-
-def get_employers_hh(search_text, max_employers=100):
+def get_employers_hh(search_text: str, max_employers: int = 100) -> list[dict[str, Any]]:
     """Получение вакансий по поисковому запросу"""
     url = "https://api.hh.ru/employers"
-    params = {"text": search_text, "per_page": max_employers}
+    params: dict[str, Any] = {"text": search_text, "per_page": max_employers}
 
     try:
         response = requests.get(url, params=params)
@@ -28,11 +27,11 @@ def get_employers_hh(search_text, max_employers=100):
         return []
 
 
-def get_employer_vacancies_hh(employer_id: int, limit_vacancies: int = 20) -> list[dict[str, Any]]:
+def get_employer_vacancies_hh(employer_id: int, limit_vacancies: int = 50) -> list[dict[str, Any]]:
     """Получение вакансий по ID работодателя"""
     url = "https://api.hh.ru/vacancies"
     params = {"employer_id": employer_id, "per_page": 100, "page": 0}
-    vacancies = []
+    vacancies: list[dict[str, Any]] = []
     try:
         while True:
             response = requests.get(url, params=params)
@@ -51,8 +50,6 @@ def get_employer_vacancies_hh(employer_id: int, limit_vacancies: int = 20) -> li
         return []
 
 
-
-
 if __name__ == "__main__":
-    # print(get_employers("яндекс"))
-    print(get_employer_vacancies("1740"))
+    print(get_employers_hh("яндекс"))
+    print(get_employer_vacancies_hh(1740))
